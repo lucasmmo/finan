@@ -1,6 +1,6 @@
 import Svg, { Path } from 'react-native-svg';
 import { PropsWithChildren } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Dimensions } from "react-native";
 import { ScrollView } from 'react-native';
 
@@ -10,9 +10,9 @@ var height = Dimensions.get('window').height; //full width
 export default function HomeScreen() {
     return (
         <>
-            <ScrollView contentContainerStyle={{ width: '100%', backgroundColor: '#E2E2E2'}} showsHorizontalScrollIndicator={false}>
+            <ScrollView contentContainerStyle={{ width: '100%', backgroundColor: '#E2E2E2' }} showsHorizontalScrollIndicator={false}>
                 <View style={{ height: 210, width: width, position: 'absolute', backgroundColor: '#4DB97F' }} />
-                <View style={{ top: 210, height: height-210, width: width, position: 'absolute', backgroundColor: '#E2E2E2' }} />
+                <View style={{ top: 210, height: height - 210, width: width, position: 'absolute', backgroundColor: '#E2E2E2' }} />
                 <View style={styles.container}>
                     <Greetings gender={"male"} name={"Lucas"} />
                     <Container>
@@ -23,17 +23,10 @@ export default function HomeScreen() {
                             <OutgoingComponent type={"fix"} amount={350000} />
                             <OutgoingComponent type={"variable"} amount={350000} />
                             <OutgoingComponent type={"investiment"} amount={350000} />
-                            <View style={{ alignItems: 'center', marginTop: 30 }}>
-                                <View style={{ height: 35, width: 192, borderRadius: 28, backgroundColor: '#4DB97F', justifyContent: 'center', alignItems: 'center' }}>
-                                    <Text style={{ color: 'white' }}>Gerenciamento de gastos</Text>
-                                </View>
-                            </View>
+                            <Button text="Gerenciamento de gastos"/>
                         </View>
                     </Container>
-                    <Container>
-                        <Text>X</Text>
-                        <OutgoingComponent type={"fix"} amount={100000} />
-                    </Container>
+                    <MyAccounts/>
                 </View>
             </ScrollView>
         </>
@@ -44,6 +37,47 @@ export default function HomeScreen() {
 type OutgoingComponentInput = {
     type: String
     amount: number
+}
+
+function Button(input: TextButtonInput) {
+    return (
+        <View style={{ alignItems: 'center', marginTop: 30 }}>
+            <View style={{ height: 35, width: 192, borderRadius: 28, backgroundColor: '#4DB97F', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: 'white' }}>{input.text}</Text>
+            </View>
+        </View>
+    )
+}
+
+function MyAccounts() {
+    return (
+        <Container>
+            <Text>Minhas contas</Text>
+            <OutputComponentAccount type={"Conta X"} amount={-100000} />
+            <OutputComponentAccount type={"Conta Y"} amount={50000} />
+            <OutputComponentAccount type={"Conta Z"} amount={750} />
+            <Button text="Gerenciamento de contas"/>
+        </Container>
+    )
+}
+
+function OutputComponentAccount(input: OutgoingComponentInput){
+    let amount = input.amount / 100;
+    let color = "#00B2FF";
+    let type = input.type;
+    
+    return (
+        <>
+            <View style={{ flexDirection: "row", justifyContent: 'space-between', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
+                <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+                    <View style={{ height: 72, width: 72, borderRadius: 72 / 2, backgroundColor: "black" }} />
+                    <Text style={{ fontSize: 14, fontWeight: 'semibold' }}>{type}</Text>
+                </View>
+                <Text style={{ color: color, fontWeight: 'bold' }}>R$ {amount.toFixed(2)}</Text>
+            </View>
+            <Divisor />
+        </>
+    )
 }
 
 function OutgoingComponent(input: OutgoingComponentInput) {
@@ -97,6 +131,10 @@ type GreetingsInput = {
     gender: String
     name: String
 };
+
+type TextButtonInput = {
+    text: String
+}
 
 function Greetings(input: GreetingsInput) {
     return (
