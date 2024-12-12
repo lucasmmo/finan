@@ -146,7 +146,7 @@ function Divisor() {
     )
 }
 
-export function VisibilityButton() {
+function VisibilityButton() {
     return (
         <>
             <Svg width="22" height="18" viewBox="0 0 22 18" fill="none">
