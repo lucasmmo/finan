@@ -1,0 +1,36 @@
+name: Backport develop to main
+
+# O workflow será acionado sempre que houver um push para a branch develop
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  backport:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout do código na branch develop
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Necessário para pegar todo o histórico de branches
+
+    # Configuração do Git
+    - name: Set up Git
+      run: |
+        git config user.name "GitHub Action"
+        git config user.email "action@github.com"
+
+    # Fazer o merge da develop na main
+    - name: Merge develop into main
+      run: |
+        git checkout develop
+        git merge main --no-ff
+
+    # Enviar as mudanças para a branch main
+    - name: Push changes to main
+      run: git push origin develop
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
