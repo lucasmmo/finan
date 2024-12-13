@@ -7,7 +7,6 @@ export default function HomeLayout() {
         headerShown: false
       }}>
       <Stack.Screen name="index" />
-      <Stack.Screen name="details/[id]" />
     </Stack>
   );
 }

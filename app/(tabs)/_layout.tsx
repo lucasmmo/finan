@@ -10,15 +10,14 @@ export default function TabLayout() {
         tabBarActiveTintColor: 'blue',
         tabBarStyle: {height: 80, paddingLeft: 15, paddingRight: 15, paddingTop: 15, paddingBottom: 20}
       }}>
-
       <Tabs.Screen
-        name="(home)"
+      // TODO: gambiarra?
+        name="(_home)"
         options={{
           tabBarLabel: () => { return null },
           tabBarIcon: () => <HomeIcon />,
         }}
       />
-
       <Tabs.Screen
         name="(report)"
         options={{
@@ -26,7 +25,6 @@ export default function TabLayout() {
           tabBarIcon: () => <ReportIcon />,
         }}
       />
-
       <Tabs.Screen
         name="(outgoing)"
         options={{
