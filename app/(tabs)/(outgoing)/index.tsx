@@ -1,32 +1,55 @@
-import { View, StyleSheet, TouchableOpacity, Text, TextInput } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, TextInput, Animated } from 'react-native';
 import { Dimensions } from "react-native";
-import { ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useState } from 'react';
-import Svg, { Path } from 'react-native-svg';
+import { useState, useEffect } from 'react';
+import React from 'react';
 
-var width = Dimensions.get('window').width; //full width
+var width = Dimensions.get('window').width;
 
 export default function OutgoingScreen() {
 
     const [selectedOption, setSelectedOption] = useState('Fixo');
     const [selectedType, setSelectedType] = useState('Despeza');
 
+    const backgroundColor = new Animated.Value(0);
+
+    const animateColor = () => {
+        Animated.timing(backgroundColor, {
+            toValue: selectedType === 'Despesa' ? 0 : 1,
+            duration: 500,
+            useNativeDriver: false, 
+          }).start();
+    };
+
+    useEffect(() => {
+        animateColor();
+    }, [selectedType]);
+
+    const backgroundColorInterpolated = backgroundColor.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['#4DB97F', '#FF4B4B'],
+    });
+
     return (
         <>
-              <View style={[styles.header, { backgroundColor: selectedType === 'Despesa' ? '#FF4B4B' : '#4DB97F' }]}>
+            <Animated.View
+                style={[styles.header, { backgroundColor: backgroundColorInterpolated }]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-                    <TouchableOpacity onPress={() => setSelectedType('Despesa')}
-                        style={[styles.headerButton, selectedType === 'Despesa' && styles.selectedHeaderButton]}>
+                    <TouchableOpacity 
+                        onPress={() => setSelectedType('Despesa')}
+                        style={[styles.headerButton, selectedType === 'Despesa' && 
+                        styles.selectedHeaderButton]}>
                         <Text style={styles.headerText}>Despesa</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => setSelectedType('Receita')}
-                        style={[styles.headerButton, selectedType === 'Receita' && styles.selectedHeaderButton]}>
+                    <TouchableOpacity 
+                        onPress={() => setSelectedType('Receita')}
+                        style={[styles.headerButton, selectedType === 'Receita' && 
+                        styles.selectedHeaderButton]}>
                         <Text style={styles.headerText}>Receita</Text>
                     </TouchableOpacity>
                 </View>
                 <Text style={styles.amount}>7.000,00</Text>
-            </View>
+            </Animated.View>
 
 
             <View style={styles.formContainer}>
@@ -43,7 +66,7 @@ export default function OutgoingScreen() {
 
                 {selectedType === 'Despesa' && (
                     <>
-                         <RenderFormFields />
+                        <RenderFormFields />
                     </>
                 )}
 
@@ -115,8 +138,6 @@ export default function OutgoingScreen() {
     }
 };
 
-
-
 const styles = StyleSheet.create({
     header: {
         height: 150,
@@ -136,6 +157,7 @@ const styles = StyleSheet.create({
         color: '#FFFF',
         fontSize: 40,
         marginTop: 10,
+        marginLeft: 165,
     },
     formContainer: {
         paddingTop: 33,
@@ -194,10 +216,10 @@ const styles = StyleSheet.create({
         marginTop: 8,
     },
     headerButton: {
-        paddingBottom: 5,  
+        paddingBottom: 5,
     },
     selectedHeaderButton: {
         borderBottomWidth: 2,
-        borderBottomColor: '#FFFF', 
+        borderBottomColor: '#FFFF',
     },
 });
