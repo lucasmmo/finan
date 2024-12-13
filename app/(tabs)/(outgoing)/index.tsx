@@ -6,38 +6,30 @@ import { useState } from 'react';
 import Svg, { Path } from 'react-native-svg';
 
 var width = Dimensions.get('window').width; //full width
-var height = Dimensions.get('window').height; //full width
 
 export default function OutgoingScreen() {
+
     const [selectedOption, setSelectedOption] = useState('Fixo');
+    const [selectedType, setSelectedType] = useState('Despeza');
+
     return (
         <>
-            <View style={{
-                height: 150,
-                width: width,
-                backgroundColor: '#4DB97F',
-                justifyContent: 'center',
-                alignItems: 'center',
-                flexDirection: 'column',
-                paddingHorizontal: 77,
-                paddingTop: 10,
-            }}
-            >
+              <View style={[styles.header, { backgroundColor: selectedType === 'Despesa' ? '#FF4B4B' : '#4DB97F' }]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-                    <Text style={{ color: '#FFFF', fontSize: 23 }}>Despesa</Text>
-                    <Text style={{ color: '#FFFF', fontSize: 23 }}>Receita</Text>
+                    <TouchableOpacity onPress={() => setSelectedType('Despesa')}
+                        style={[styles.headerButton, selectedType === 'Despesa' && styles.selectedHeaderButton]}>
+                        <Text style={styles.headerText}>Despesa</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setSelectedType('Receita')}
+                        style={[styles.headerButton, selectedType === 'Receita' && styles.selectedHeaderButton]}>
+                        <Text style={styles.headerText}>Receita</Text>
+                    </TouchableOpacity>
                 </View>
-                <Text style={{ color: '#FFFF', fontSize: 40, marginLeft: 150, marginTop: 10 }}>7.000,00</Text>
+                <Text style={styles.amount}>7.000,00</Text>
             </View>
 
 
-            <View style={{
-                paddingTop: 33,
-                paddingHorizontal: 20,
-                paddingVertical: 10,
-                backgroundColor: '#FFFF',
-                height: '100%'
-            }}>
+            <View style={styles.formContainer}>
                 <Text style={styles.label}>Descrição</Text>
                 <View style={styles.inputContainer}>
                     <Icon name="edit" size={20} color="#4DB97F" style={styles.icon} />
@@ -49,6 +41,27 @@ export default function OutgoingScreen() {
                     />
                 </View>
 
+                {selectedType === 'Despesa' && (
+                    <>
+                         <RenderFormFields />
+                    </>
+                )}
+
+                {selectedType === 'Receita' && (
+                    <>
+                        <RenderFormFields />
+                    </>
+                )}
+
+                <View style={styles.line} />
+            </View>
+
+        </>
+    )
+
+    function RenderFormFields() {
+        return (
+            <>
                 <Text style={[styles.label, { marginTop: 30 }]}>Categoria</Text>
                 <View style={styles.inputContainer}>
                     <Icon name="list" size={20} color="#4DB97F" style={styles.icon} />
@@ -97,19 +110,40 @@ export default function OutgoingScreen() {
                         <Text style={styles.optionText}>Parcelado</Text>
                     </TouchableOpacity>
                 </View>
-
-            </View>
-
-        </>
-    )
+            </>
+        )
+    }
 };
 
-type GreetingsInput = {
-    gender: String
-    name: String
-};
+
 
 const styles = StyleSheet.create({
+    header: {
+        height: 150,
+        width: width,
+        backgroundColor: "#4DB97F",
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        paddingHorizontal: 77,
+        paddingTop: 10
+    },
+    headerText: {
+        color: '#FFFF',
+        fontSize: 23
+    },
+    amount: {
+        color: '#FFFF',
+        fontSize: 40,
+        marginTop: 10,
+    },
+    formContainer: {
+        paddingTop: 33,
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        backgroundColor: '#FFFF',
+        height: '100%',
+    },
     label: {
         fontSize: 18,
         marginBottom: 8,
@@ -139,7 +173,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderWidth: 1,
         borderColor: '#ccc',
-        marginLeft: 5,
+        marginLeft: 5
     },
     optionContainer: {
         flexDirection: 'row',
@@ -152,5 +186,18 @@ const styles = StyleSheet.create({
     optionText: {
         fontSize: 15,
         color: '#333',
+    },
+    line: {
+        width: '100%',
+        height: 1,
+        backgroundColor: '#ccc',
+        marginTop: 8,
+    },
+    headerButton: {
+        paddingBottom: 5,  
+    },
+    selectedHeaderButton: {
+        borderBottomWidth: 2,
+        borderBottomColor: '#FFFF', 
     },
 });
