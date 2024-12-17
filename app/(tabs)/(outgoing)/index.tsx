@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity, Text, TextInput, Animated } from 'react-native';
+import { SafeAreaView , View, StyleSheet, TouchableOpacity, Text, TextInput, Animated } from 'react-native';
 import { Dimensions } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useState, useEffect } from 'react';
@@ -9,7 +9,7 @@ var width = Dimensions.get('window').width;
 export default function OutgoingScreen() {
 
     const [selectedOption, setSelectedOption] = useState('Fixo');
-    const [selectedType, setSelectedType] = useState('Despeza');
+    const [selectedType, setSelectedType] = useState('Despesa');
 
     const backgroundColor = new Animated.Value(0);
 
@@ -31,8 +31,8 @@ export default function OutgoingScreen() {
     });
 
     return (
-        <>
-            <Animated.View
+        <SafeAreaView style={{ flex: 1}}>
+            <Animated.View 
                 style={[styles.header, { backgroundColor: backgroundColorInterpolated }]}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
                     <TouchableOpacity 
@@ -51,8 +51,24 @@ export default function OutgoingScreen() {
                 <Text style={styles.amount}>7.000,00</Text>
             </Animated.View>
 
+            <SafeAreaView style={styles.formContainer}>
+                {selectedType === 'Despesa' && (
+                    <RenderFormFields />
+                )}
 
-            <View style={styles.formContainer}>
+                {selectedType === 'Receita' && (
+                    <RenderFormFields />
+                )}
+
+                <View style={styles.line} />
+            </SafeAreaView>
+        </SafeAreaView>
+    );
+
+    function RenderFormFields() {
+        console.log("RenderFormFields foi chamado!");
+        return (
+            <>
                 <Text style={styles.label}>Descrição</Text>
                 <View style={styles.inputContainer}>
                     <Icon name="edit" size={20} color="#4DB97F" style={styles.icon} />
@@ -64,27 +80,6 @@ export default function OutgoingScreen() {
                     />
                 </View>
 
-                {selectedType === 'Despesa' && (
-                    <>
-                        <RenderFormFields />
-                    </>
-                )}
-
-                {selectedType === 'Receita' && (
-                    <>
-                        <RenderFormFields />
-                    </>
-                )}
-
-                <View style={styles.line} />
-            </View>
-
-        </>
-    )
-
-    function RenderFormFields() {
-        return (
-            <>
                 <Text style={[styles.label, { marginTop: 30 }]}>Categoria</Text>
                 <View style={styles.inputContainer}>
                     <Icon name="list" size={20} color="#4DB97F" style={styles.icon} />
@@ -169,14 +164,17 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 18,
         marginBottom: 8,
+        marginLeft: 30, 
         color: '#333',
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginLeft: 30, 
         borderBottomColor: '#ccc',
         borderBottomWidth: 1,
         paddingLeft: 10,
+        width: '90%'
     },
     icon: {
         marginRight: 10,
@@ -195,7 +193,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         borderWidth: 1,
         borderColor: '#ccc',
-        marginLeft: 5
+        marginLeft: 30, 
     },
     optionContainer: {
         flexDirection: 'row',
@@ -210,13 +208,15 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     line: {
-        width: '100%',
+        width: '90%',
         height: 1,
         backgroundColor: '#ccc',
         marginTop: 8,
+        marginLeft: 30, 
     },
     headerButton: {
         paddingBottom: 5,
+        
     },
     selectedHeaderButton: {
         borderBottomWidth: 2,
